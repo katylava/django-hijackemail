@@ -1,14 +1,17 @@
 from django.core.mail.backends import smtp
 from django.conf import settings
 
+
 def _transform_email(email):
-    replacement =  getattr(settings, 'HIJACK_EMAIL_REPLACEMENT', None)
+    replacement = getattr(settings, 'HIJACK_EMAIL_REPLACEMENT', None)
     return replacement or '{}@{}'.format(
         email.replace('@', '-at-'),
         getattr(settings, 'HIJACK_EMAIL_DOMAIN', 'local')
     )
 
-transform_email = getattr(settings, 'HIJACK_EMAIL_TRANSFORMATION', _transform_email)
+transform_email = getattr(settings, 'HIJACK_EMAIL_TRANSFORMATION',
+                          _transform_email)
+
 
 class HijackEmailBackend(smtp.EmailBackend):
     def send_messages(self, email_messages):
