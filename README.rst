@@ -26,13 +26,23 @@ HijackEmailBackend is a subclass of Django's smtp backend (for now).
 Settings
 --------
 
-HIJACK_EMAIL_REPLACEMENT:  Instead of transforming the original email, just
-                           send all email to this address.
-HIJACK_EMAIL_DOMAIN:  Use the default transformation with this catchall
-                      domain. If no domain is provided, uses 'local'.
-HIJACK_EMAIL_TRANSFORMATION:  A function which, given an email address,
-                              returns a different address for email to go to.
-HIJACK_EMAIL_EXCLUDE: A list of email addresses that should not be hijacked.
-                      For example, you might include your own address here.
+The default transformation converts john.doe@example.com to
+john.doe-at-example.com@local.
+
+HIJACK_EMAIL_REPLACEMENT
+    Instead of transforming the original email, just send
+    all email to this address.
+
+HIJACK_EMAIL_DOMAIN
+    Use the default transformation with this catchall
+    domain. If no domain is provided, uses 'local'.
+
+HIJACK_EMAIL_TRANSFORMATION
+    A function which takes an email address, and returns
+    a transformed version of it.
+
+HIJACK_EMAIL_EXCLUDE
+    A list of email addresses that should not be hijacked.
+    For example, you might include your own address here.
 
 
