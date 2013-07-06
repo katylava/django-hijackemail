@@ -1,13 +1,13 @@
 django-hijackemail
 ==================
 
-Does your application sends email to users, and do you develop, test, and/or
-QA with real user data? Instead of sending your users test emails, you can
-hijack outgoing mail with django-hijackemail, and still confirm the right
-emails go to the right people by providing a receiver transformation setting.
+This app fills a very specific use case: you want to test email delivery
+in a QA environment and your clients, as admins, want to receive real emails, 
+but you don't want the QA process to trigger emails to real end users. 
 
-For example, if an email is meant to go to john.doe@example.com, you can
-instead have it sent to john.doe-at-example.com@your-catchall-domain.com.
+With a couple settings, you can ensure only email to specified addresses
+will go to the original recipients, and all others will go to a catch-all
+address or domain.
 
 
 Installation
@@ -19,30 +19,32 @@ Add ``hijackemail`` to your ``INSTALLED_APPS``. In your environment's
 settings file, set your ``EMAIL_BACKEND`` to
 ``hijackemail.backends.HijackEmailBackend``.
 
-
-HijackEmailBackend is a subclass of Django's smtp backend (for now).
+Then configure the settings below as necessary.
 
 
 Settings
 --------
 
-The default transformation converts john.doe@example.com to
-john.doe-at-example.com@local.
-
-HIJACK_EMAIL_REPLACEMENT
-    Instead of transforming the original email, just send
-    all email to this address.
-
-HIJACK_EMAIL_DOMAIN
-    Use the default transformation with this catchall
-    domain. If no domain is provided, uses 'local'.
+HIJACK_EMAIL_BACKEND
+    A string represented the dotted path to the actual
+    email backend used to send messages.
+    Default is ``django.core.mail.backends.smtp.EmailBackend``.
 
 HIJACK_EMAIL_TRANSFORMATION
     A function which takes an email address, and returns
     a transformed version of it.
 
+    The default transformation converts john.doe@example.com to
+    john.doe-at-example.com@local.
+
+HIJACK_EMAIL_REPLACEMENT
+    Instead of transforming the original email, just send
+    all email to this address. Default is None.
+
+HIJACK_EMAIL_DOMAIN
+    Use the default transformation with this catchall
+    domain. Default is "local".
+
 HIJACK_EMAIL_EXCLUDE
     A list of email addresses that should not be hijacked.
-    For example, you might include your own address here.
-
-
+    Default is empty list.
